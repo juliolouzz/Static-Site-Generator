@@ -1,6 +1,10 @@
 import unittest
+import re
+
 from inline_markdown import (
     split_nodes_delimiter,
+    extract_markdown_images,
+    extract_markdown_links,
 )
 
 from textnode import (
@@ -82,6 +86,58 @@ class TestInlineMarkdown(unittest.TestCase):
             ],
             new_nodes,
         )
+
+class TestMarkdownExtraction(unittest.TestCase):
+    
+    def test_extract_markdown_images(self):
+        # Test with a string containing two markdown images
+        text = "This is text with an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and ![another](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/dfsdkjfd.png)"
+        expected = [
+            ("image", "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png"),
+            ("another", "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/dfsdkjfd.png")
+        ]
+        result = extract_markdown_images(text)
+        self.assertEqual(result, expected)
+        
+        # Test with a string that contains no images
+        text = "No images here!"
+        expected = []
+        result = extract_markdown_images(text)
+        self.assertEqual(result, expected)
+        
+        # Test with a string containing multiple markdown images
+        text = "![image1](url1) ![image2](url2)"
+        expected = [
+            ("image1", "url1"),
+            ("image2", "url2")
+        ]
+        result = extract_markdown_images(text)
+        self.assertEqual(result, expected)
+
+    def test_extract_markdown_links(self):
+        # Test with a string containing two markdown links
+        text = "This is text with a [link](https://www.example.com) and [another](https://www.example.com/another)"
+        expected = [
+            ("link", "https://www.example.com"),
+            ("another", "https://www.example.com/another")
+        ]
+        result = extract_markdown_links(text)
+        self.assertEqual(result, expected)
+        
+        # Test with a string that contains no links
+        text = "No links here!"
+        expected = []
+        result = extract_markdown_links(text)
+        self.assertEqual(result, expected)
+        
+        # Test with a string containing multiple markdown links
+        text = "[link1](url1) [link2](url2)"
+        expected = [
+            ("link1", "url1"),
+            ("link2", "url2")
+        ]
+        result = extract_markdown_links(text)
+        self.assertEqual(result, expected)
 
 if __name__ == "__main__":
     unittest.main()
