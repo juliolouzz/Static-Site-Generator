@@ -28,11 +28,14 @@ sudo apt install python3
 
 To build the static site and serve it locally, follow these steps:
 
+### Running the Generator and Serving the Site
+
+To build the static site and serve it locally, follow these steps:
+
 1.  **Run the Main Script**:
     This script will:
-
-    ````bash
-    ./main.sh
+        ```bash
+        ./main.sh
 
         ```
 
@@ -41,7 +44,6 @@ To build the static site and serve it locally, follow these steps:
         - Copy the static assets from `static/` to `public/`.
         - Apply the HTML templates.
         - Serve the generated site from the `public/` directory.
-    ````
 
 ## Directory and File Descriptions
 
