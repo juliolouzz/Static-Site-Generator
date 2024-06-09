@@ -7,6 +7,7 @@ from inline_markdown import (
     extract_markdown_links,
     split_nodes_image,
     split_nodes_link,
+    text_to_textnodes,
 )
 
 from textnode import (
@@ -216,6 +217,73 @@ class TestSplitNodes(unittest.TestCase):
             TextNode(" some text", text_type_text)
         ]
         self.assertEqual(new_nodes, expected)
+
+class TestTextToTextNodes(unittest.TestCase):
+
+    def test_bold_italic_code(self):
+        # Test with text containing bold, italic, and code
+        text = "This is **bold** and *italic* and `code`."
+        expected = [
+            TextNode("This is ", text_type_text),
+            TextNode("bold", text_type_bold),
+            TextNode(" and ", text_type_text),
+            TextNode("italic", text_type_italic),
+            TextNode(" and ", text_type_text),
+            TextNode("code", text_type_code),
+            TextNode(".", text_type_text),
+        ]
+        result = text_to_textnodes(text)
+        self.assertEqual(result, expected)
+
+    def test_images(self):
+        # Test with text containing images
+        text = "This is text with an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and another ![second image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/3elNhQu.png)"
+        expected = [
+            TextNode("This is text with an ", text_type_text),
+            TextNode("image", text_type_image, "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png"),
+            TextNode(" and another ", text_type_text),
+            TextNode("second image", text_type_image, "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/3elNhQu.png"),
+        ]
+        result = text_to_textnodes(text)
+        self.assertEqual(result, expected)
+
+    def test_links(self):
+        # Test with text containing links
+        text = "This is text with a [link](https://www.example.com) and another [second link](https://www.example.com/another)"
+        expected = [
+            TextNode("This is text with a ", text_type_text),
+            TextNode("link", text_type_link, "https://www.example.com"),
+            TextNode(" and another ", text_type_text),
+            TextNode("second link", text_type_link, "https://www.example.com/another"),
+        ]
+        result = text_to_textnodes(text)
+        self.assertEqual(result, expected)
+
+    def test_mixed_content(self):
+        # Test with mixed content
+        text = "This is **bold** and *italic* with an ![image](https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png) and a [link](https://www.example.com)."
+        expected = [
+            TextNode("This is ", text_type_text),
+            TextNode("bold", text_type_bold),
+            TextNode(" and ", text_type_text),
+            TextNode("italic", text_type_italic),
+            TextNode(" with an ", text_type_text),
+            TextNode("image", text_type_image, "https://storage.googleapis.com/qvault-webapp-dynamic-assets/course_assets/zjjcJKZ.png"),
+            TextNode(" and a ", text_type_text),
+            TextNode("link", text_type_link, "https://www.example.com"),
+            TextNode(".", text_type_text),
+        ]
+        result = text_to_textnodes(text)
+        self.assertEqual(result, expected)
+
+    def test_no_special_content(self):
+        # Test with text containing no special content
+        text = "Just plain text with no formatting."
+        expected = [
+            TextNode("Just plain text with no formatting.", text_type_text)
+        ]
+        result = text_to_textnodes(text)
+        self.assertEqual(result, expected)
 
 if __name__ == "__main__":
     unittest.main()
