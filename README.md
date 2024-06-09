@@ -30,10 +30,11 @@ To build the static site and serve it locally, follow these steps:
 
 1.  **Run the Main Script**:
     This script will:
+
     ```bash
     ./main.sh
 
-        ```
+    ```
 
         - Convert the Markdown files in `content/` to HTML. This is done recursively. Place your markdown files in subdirectories of `/content`
         For example: `/content/majesty` will create a page named majesty
