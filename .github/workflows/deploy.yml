@@ -47,7 +47,7 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4  # Updated to the latest version
         with:
-          github_token: ${{ secrets.GITHUB_TOKEN }}
+          deploy_token: ${{ secrets.GH_PAT }}  # Use the PAT instead of GITHUB_TOKEN
           publish_dir: ./public  # Directory where the generated site is stored
           publish_branch: gh-pages  # Ensure deployment to gh-pages branch
 
