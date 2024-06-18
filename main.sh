@@ -1,2 +1,4 @@
 python src/main.py
-python server.py --dir public --port 8888
+# Uncoment the line bellow to run the server on local machine
+# python server.py --dir public --port 8888
+
