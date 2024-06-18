@@ -19,7 +19,7 @@ jobs:
       - name: Set up Python
         uses: actions/setup-python@v4  # Updated to the latest version
         with:
-          python-version: '3.12.2'  # Specify the Python version you need
+          python-version: '3.x'  # Specify the Python version you need
 
       - name: Install dependencies
         run: |
@@ -47,7 +47,6 @@ jobs:
       - name: Deploy to GitHub Pages
         uses: peaceiris/actions-gh-pages@v4  # Updated to the latest version
         with:
-          deploy_token: ${{ secrets.GH_PAT }}  # Use the PAT instead of GITHUB_TOKEN
+          personal_token: ${{ secrets.GH_PAT }}  # Use the PAT instead of GITHUB_TOKEN
           publish_dir: ./public  # Directory where the generated site is stored
           publish_branch: gh-pages  # Ensure deployment to gh-pages branch
-
